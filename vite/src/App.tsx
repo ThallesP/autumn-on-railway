@@ -56,8 +56,8 @@ export default function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/sign-in" element={<SignIn />} />
-				<Route path="/pw-sign-in" element={<PasswordSignIn />} />
+				<Route path="/sign-in" element={<PasswordSignIn />} />
+				<Route path="/otp-sign-in" element={<SignIn />} />
 				<Route path="/consent" element={<Consent />} />
 				<Route path="/accept" element={<AcceptInvitation />} />
 				<Route path="/close" element={<CloseScreen />} />

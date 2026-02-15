@@ -40,7 +40,8 @@ const ALLOWED_ORIGINS = [
 	"https://dev.useautumn.com",
 	"https://api.staging.useautumn.com",
 	"https://localhost:8080",
-];
+	process.env.CLIENT_URL,
+].filter(Boolean) as string[];
 
 const ALLOWED_HEADERS = [
 	"app_env",

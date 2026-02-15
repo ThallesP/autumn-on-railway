@@ -69,6 +69,11 @@ export const auth = betterAuth({
 			"https://*.useautumn.com",
 		];
 
+		// Add CLIENT_URL if set
+		if (process.env.CLIENT_URL) {
+			origins.push(process.env.CLIENT_URL);
+		}
+
 		// Add dynamic port origins in development
 		if (process.env.NODE_ENV === "development") {
 			// Add ports 3000-3010 for multiple instances
@@ -82,7 +87,7 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 		disableSignUp: false,
-		requireEmailVerification: true,
+		requireEmailVerification: false,
 		minPasswordLength: 8,
 		maxPasswordLength: 128,
 		autoSignIn: true,

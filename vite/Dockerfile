@@ -37,12 +37,10 @@ COPY vite ./vite
 # Trim workspaces (same as deps stage)
 RUN cat package.json | bun -e "const pkg = await Bun.stdin.json(); pkg.workspaces.packages = ['shared', 'vite']; console.log(JSON.stringify(pkg, null, 2));" > package.json.tmp && mv package.json.tmp package.json
 
-# Build args (Railway passes these during docker build)
-ARG VITE_BACKEND_URL
-ARG VITE_FRONTEND_URL
-ARG NODE_ENV=production
-
-ENV NODE_ENV=${NODE_ENV}
+# Build with placeholders that get replaced at runtime
+ENV VITE_BACKEND_URL=__VITE_BACKEND_URL_PLACEHOLDER__
+ENV VITE_FRONTEND_URL=__VITE_FRONTEND_URL_PLACEHOLDER__
+ENV NODE_ENV=production
 
 WORKDIR /app/vite
 
@@ -60,6 +58,11 @@ COPY --from=builder /app/vite/dist /srv
 # Copy Caddyfile for SPA routing
 COPY vite/Caddyfile /etc/caddy/Caddyfile
 
+# Copy entrypoint script
+COPY vite/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 EXPOSE 80
 
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
